@@ -1,0 +1,3 @@
+[submodule "dogvscat"]
+    path = dogvscat
+    url = https://github.com/BretFisher/dogvscat
