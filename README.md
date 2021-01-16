@@ -37,8 +37,6 @@ https://docs.docker.com/machine/drivers/generic/
 
 - docker-machine no reconoce Raspbian en una raspberry, así que hay que cambiar temporalmente el ID del sistema operativo en /etc/os-release para engañar a docker-machine
 
-Última modificación 12 de enero, 2021
-
 # Crear docker swarm con un manager y un worker
 - Crear manager
 	- docker-machine ssh <manager-machine> docker swarm init --advertise-addr <ip|inet>[:<port>]
@@ -51,3 +49,6 @@ https://docs.docker.com/machine/drivers/generic/
 	- eval $(docker-machine env <manager-machine>)
 - Desplegar servicios
 	- docker stack deploy -c <stack-configuration>.yml <stack-name>
+
+
+Última modificación 16 de enero, 2021
