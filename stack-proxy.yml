@@ -26,6 +26,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "8080:8080"
     command:
       # Use your favourite settings here, but add:
       - --providers.docker
@@ -33,6 +34,7 @@ services:
       - --providers.docker.network=proxy
       - --providers.docker.watch
       - --api
+      - --api.insecure=true
       - --entryPoints.web.address=:80
       - --entryPoints.websecure.address=:443
       - --entrypoints.websecure.http.tls=true

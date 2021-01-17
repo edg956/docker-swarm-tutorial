@@ -1,3 +1,6 @@
 [submodule "dogvscat"]
 	path = dogvscat
 	url = https://github.com/BretFisher/dogvscat
+[submodule "swarmpit"]
+	path = swarmpit
+	url = https://github.com/swarmpit/swarmpit
