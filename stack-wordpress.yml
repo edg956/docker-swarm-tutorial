@@ -1,0 +1,62 @@
+version: "3.7"
+
+x-default-opts:
+  &default-opts
+  logging:
+    options:
+      max-size: "1m"
+
+services:
+    app:
+        <<: *default-opts
+        image: wordpress:5.4.1-php7.4-apache
+        volumes:
+            - wp-data:/var/www/html
+        networks:
+            - wp-net
+            - proxy
+        env_file:
+            ./wp-secrets/.env-wp
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.60'
+                    memory: 1024M
+            placement:
+                constraints:
+                    - node.hostname == rubia
+            labels:
+                traefik.http.routers.wordpress.rule: Host(`wordpress.arepa.space`)
+                traefik.http.routers.wordpress.entryPoints: websecure
+                traefik.http.routers.wordpress.service: wordpress_web
+                traefik.http.services.wordpress_web.loadbalancer.server.port: 80
+                traefik.http.routers.wordpress.tls: "true"
+                traefik.http.routers.wordpress.tls.certresolver: letsencrypt
+                traefik.enable: "true"
+    mysql:
+        image: mysql:5.7
+        volumes:
+            - db-data:/var/lib/mysql
+        env_file:
+            ./wp-secrets/.env-db
+        restart: unless-stopped
+        networks:
+            - wp-net
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.60'
+                    memory: 1024M
+            placement:
+                constraints:
+                    - node.hostname == rubia
+    
+volumes:
+    wp-data:
+    db-data:
+
+networks:
+    proxy:
+        external: true
+    wp-net:
+        driver: overlay

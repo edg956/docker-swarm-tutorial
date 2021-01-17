@@ -1,0 +1,105 @@
+version: '3.3'
+
+services:
+  app:
+    image: swarmpit/swarmpit:latest
+    environment:
+      - SWARMPIT_DB=http://db:5984
+      - SWARMPIT_INFLUXDB=http://influxdb:8086
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+    networks:
+      - swarmpit_net
+      - proxy
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+      placement:
+        constraints:
+          - node.hostname == rubia
+      labels:
+        traefik.http.routers.swarmpit.rule: Host(`swarmpit.arepa.space`)
+        traefik.http.routers.swarmpit.entryPoints: websecure
+        traefik.http.routers.swarmpit.service: swarmpit_web
+        traefik.http.services.swarmpit_web.loadbalancer.server.port: 8080
+        traefik.http.routers.swarmpit.tls: "true"
+        traefik.http.routers.swarmpit.tls.certresolver: letsencrypt
+        traefik.enable: "true"
+
+  db:
+    image: couchdb:2.3.0
+    volumes:
+      - db-data:/opt/couchdb/data
+    networks:
+      - swarmpit_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 256M
+        reservations:
+          cpus: '0.15'
+          memory: 128M
+      placement:
+        constraints:
+          - node.hostname == rubia
+
+  influxdb:
+    image: influxdb:1.7
+    volumes:
+      - influx-data:/var/lib/influxdb
+    networks:
+      - swarmpit_net
+    deploy:
+      resources:
+        limits:
+          cpus: '0.60'
+          memory: 512M
+        reservations:
+          cpus: '0.30'
+          memory: 128M
+      placement:
+        constraints:
+          - node.hostname == rubia
+
+  agent:
+    image: swarmpit/agent:latest
+    environment:
+      - DOCKER_API_VERSION=1.35
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - swarmpit_net
+    deploy:
+      mode: global
+      labels:
+        swarmpit.agent: 'true'
+      resources:
+        limits:
+          cpus: '0.10'
+          memory: 64M
+        reservations:
+          cpus: '0.05'
+          memory: 32M
+
+networks:
+  proxy:
+    external: true
+  swarmpit_net:
+    driver: overlay
+
+volumes:
+  db-data:
+    driver: local
+  influx-data:
+    driver: local
