@@ -2,23 +2,23 @@
 
 - Configurar host remoto
 	- Crear usuario y asignarle contraseña
-		- sudo useradd <user>
-		- sudo passwd <user>
+		- sudo useradd \<user\>
+		- sudo passwd \<user\>
 	- Añadir usuario a sudoers
-		- <user>	ALL=(ALL) NOPASSWD: ALL
+		- \<user\>	ALL=(ALL) NOPASSWD: ALL
 
 - Configurar credenciales en host local
 	- Crear llaves y copiar llave pública a host remoto
 		- ssh-keygen
-		- ssh-copy-id -i <llave_rsa publica> <user>@<domain> # user ha de ser el mismo que el configurado arriba
+		- ssh-copy-id -i \<llave_rsa publica\> \<user\>@\<domain\> # user ha de ser el mismo que el configurado arriba
 
 - Crear maquina con docker-machine
 	- Ejecutar docker-machine para crear el comando
 		- docker-machine create --driver generic \
-			--generic-ip-address=<ip or domain> \
+			--generic-ip-address=\<ip or domain\> \
 			--generic-ssh-key <llave_rsa privada> \
-			--generic-ssh-user <user> \		     # user ha de ser el configurado para el host remoto
-			<machine>
+			--generic-ssh-user \<user\> \		     # user ha de ser el configurado para el host remoto
+			\<machine\>
 
 - Asegurar las credenciales
 	- Ir a la carpeta de las credenciales de docker machine
@@ -39,16 +39,16 @@ https://docs.docker.com/machine/drivers/generic/
 
 # Crear docker swarm con un manager y un worker
 - Crear manager
-	- docker-machine ssh <manager-machine> docker swarm init --advertise-addr <ip|inet>[:<port>]
+	- docker-machine ssh \<manager-machine\> docker swarm init --advertise-addr \<ip|inet\>[:\<port\>]
 		- Este comando imprimirá el token para unir workers al swarm
 - Añadir workers
-	- docker-machine ssh <worker-machine> docker swarm join --token <token-paso-anterior> <ip|addr manager>:<port>
+	- docker-machine ssh \<worker-machine\> docker swarm join --token \<token-paso-anterior\> \<ip|addr manager\>:\<port\>
 
 # Desplegar servicios (stacks)
 - Configurar entorno para controlar manager
-	- eval $(docker-machine env <manager-machine>)
+	- eval $(docker-machine env \<manager-machine\>)
 - Desplegar servicios
-	- docker stack deploy -c <stack-configuration>.yml <stack-name>
+	- docker stack deploy -c \<stack-configuration\>.yml \<stack-name\>
 
 
-Última modificación 16 de enero, 2021
+Última modificación 04 de abril, 2021
