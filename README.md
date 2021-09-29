@@ -1,4 +1,5 @@
-# Cómo montar docker-machine para una máquina linux
+# Cómo crear tu propio cluster de Docker Swarm
+## Montar docker-machine para una máquina linux
 
 - Configurar host remoto
 	- Crear usuario y asignarle contraseña
@@ -39,18 +40,21 @@ https://docs.docker.com/machine/drivers/generic/
 
 - Hay que asegurarse de que el usuario que se haya creado para docker-machine tenga su propio directorio en /home y sea de su propiedad.
 
-# Crear docker swarm con un manager y un worker
+## Crear docker swarm con un manager y añadir workers
 - Crear manager
 	- docker-machine ssh \<manager-machine\> docker swarm init --advertise-addr \<ip|inet\>[:\<port\>]
 		- Este comando imprimirá el token para unir workers al swarm
 - Añadir workers
 	- docker-machine ssh \<worker-machine\> docker swarm join --token \<token-paso-anterior\> \<ip|addr manager\>:\<port\>
 
-# Desplegar servicios (stacks)
+## Desplegar servicios (stacks)
 - Configurar entorno para controlar manager
 	- eval $(docker-machine env \<manager-machine\>)
 - Desplegar servicios
 	- docker stack deploy -c \<stack-configuration\>.yml \<stack-name\>
 
-
-Última modificación 04 de abril, 2021
+# TODO:
+- Añadir plugins
+- Añadir otros métodos alternativos a docker-machine para gestionar el clúster (¿ansible?)
+- Ampliar el scope de esta guía para explicar componentes de interés básicos en un cluster (monitorización, enrutamiento con traefik, interfaz gráfica de gestión como Portainer o Swarmkit)
+- Extras?
