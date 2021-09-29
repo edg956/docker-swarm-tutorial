@@ -47,16 +47,16 @@ https://docs.docker.com/machine/drivers/generic/.
 
 ## Crear docker swarm con un manager y añadir workers
 - Crear manager
-	- `docker-machine ssh \<manager-machine\> docker swarm init --advertise-addr \<ip|inet\>[:\<port\>]`
+	- `docker-machine ssh <manager-machine> docker swarm init --advertise-addr <ip|inet>[:<port>]`
 		- Este comando imprimirá el token para unir workers al swarm
 - Añadir workers
-	- `docker-machine ssh \<worker-machine\> docker swarm join --token \<token-paso-anterior\> \<ip|addr manager\>:\<port\>`
+	- `docker-machine ssh <worker-machine> docker swarm join --token <token-paso-anterior> <ip|addr manager>:<port>`
 
 ## Desplegar servicios (stacks)
 - Configurar entorno para controlar manager
-	- `eval $(docker-machine env \<manager-machine\>)`
+	- `eval $(docker-machine env <manager-machine>)`
 - Desplegar servicios
-	- `docker stack deploy -c \<stack-configuration\>.yml \<stack-name\>`
+	- `docker stack deploy -c <stack-configuration>.yml <stack-name>`
 
 # TODO:
 - Añadir plugins
