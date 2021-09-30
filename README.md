@@ -1,4 +1,6 @@
 # Cómo crear tu propio cluster de Docker Swarm
+Este es un tutorial basado en el repositorio de [dogvscat](https://github.com/BretFisher/dogvscat) de Bret Fisher. Mejoras are welcome (aunque hay quien diga que Docker Swarm está muerto).
+
 ## Montar docker-machine para una máquina linux
 - Configurar host remoto
 	- Crear usuario y asignarle contraseña
